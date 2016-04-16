@@ -1,36 +1,37 @@
-var http = require('http');
-var fs = require('fs');
+// var http = require('http');
+// var fs = require('fs');
+var express = require('express');
+var exphbs  = require('express-handlebars');
 
-function serveStatic(res, path, contentType, responseCode) {
-	if(!responseCode) responseCode = 200;
-	fs.readFile(__dirname + path, function(err,data) {
-	
-	if(err) {
-		res.writeHead(500, { 'Content-Type': 'text/plain' });
-		res.end('500 - Internal Error');
-	} else{
-		res.writeHead(responseCode,
-		{ 'Content-Type': contentType });
-			res.end(data);
-		}
-	});
-}
+var app = express();
 
-http.createServer(function(req,res){
-    var path = req.url.toLowerCase();
-    switch(path) {
-        case '/':
-            serveStatic(res, '/public/home.html', 'text/html')
-            //res.writeHead(200, { 'Content-Type': 'text/plain' });
-            // res.end('Homepage');
-            break;
-        case '/about':
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end('About');
-            break;
-        default:
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
-            res.end('Not Found');
-            break;
-    }
-}).listen(3000);
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+app.set('port',process.env.PORT || 3000);
+app.listen(app.get('port'), function(){
+    console.log('the server is running', app.get('port'))
+});
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());//support json enconded bodies
+app.use(bodyParser.urlencoded({ extended: true})); //support encoded bodies
+
+
+app.get('/', function(req, res) {
+    res.render('home');
+});
+app.get('/about', function(req, res) {
+    res.render('about');
+});
+// 404 catch-all handler (middleware)
+app.use(function(req, res, next){
+    res.status(404);
+    res.render('404');
+});
+// 500 error handler (middleware)
+app.use(function(err, req, res, next){
+    console.error(err.stack);
+    res.status(500);
+    res.render('500');
+});
