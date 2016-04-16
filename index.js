@@ -35,3 +35,15 @@ app.use(function(err, req, res, next){
     res.status(500);
     res.render('500');
 });
+
+var artists = [
+    { id: 0, name: 'Kiiara', track: 'Feels' },
+    { id: 1, name: 'Tep No', track: 'Lana Del Dre' },
+    { id: 2, name: 'Mtns', track: 'Fears' },
+    { id: 3, name: 'White Sea', track: 'Prague' },
+];
+
+app.get('/artists', function(req, res){
+    res.json(artists);
+    
+});
