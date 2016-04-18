@@ -43,7 +43,19 @@ var artists = [
     { id: 3, name: 'White Sea', track: 'Prague' },
 ];
 
-app.get('/artists', function(req, res){
-    res.json(artists);
+
+
+app.post('/search', function(req,res){
+    var user_search = req.body.search_term;
+    var search_results = artists.indexOf(user_search);
+
+    if ( search_results || search_results === false ){
+
+        res.send(artists[search_results]);
+
+    } else {
+        res.send('No artists match your search');
+    }
+
     
 });
