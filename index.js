@@ -24,6 +24,34 @@ app.get('/', function(req, res) {
 app.get('/about', function(req, res) {
     res.render('about');
 });
+
+
+var artists = [     
+    { name: 'kiiara', track: 'feels' },
+    { name: 'tep_no', track: 'lana_del_dre' },
+    { name: 'mtns', track: 'fears' },
+    { name: 'white_sea', track: 'prague' },
+];
+
+
+app.post('/search', function(req,res){
+    res.type('html');
+    var page_title = '<h1>Searching for: ' + req.body.search_term + '</h1>';
+    
+    var search_results = artists.find(function( obj ) {
+        return obj.name == req.body.search_term;
+    });
+    if (search_results){
+
+        res.send(page_title + 'Track: ' + search_results.track);
+
+    } else {
+        
+        res.send(page_title + 'No artists match your search');
+    }
+    
+});
+
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
     res.status(404);
@@ -36,26 +64,4 @@ app.use(function(err, req, res, next){
     res.render('500');
 });
 
-var artists = [
-    { id: 0, name: 'Kiiara', track: 'Feels' },
-    { id: 1, name: 'Tep No', track: 'Lana Del Dre' },
-    { id: 2, name: 'Mtns', track: 'Fears' },
-    { id: 3, name: 'White Sea', track: 'Prague' },
-];
 
-
-
-app.post('/search', function(req,res){
-    var user_search = req.body.search_term;
-    var search_results = artists.indexOf(user_search);
-
-    if ( search_results || search_results === false ){
-
-        res.send(artists[search_results]);
-
-    } else {
-        res.send('No artists match your search');
-    }
-
-    
-});
