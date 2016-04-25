@@ -9,14 +9,21 @@
 
 <h2>Add an Artist to the List:</h2>
 
-<form method="POST" action="/search">
-	<input type="text" name="search_term" placeholder="Search" required maxlength="100">
+<form method="POST" action="/add">
+	<input type="text" name="add_term" placeholder="Search" required maxlength="100">
 	<button>Search</button>
 </form>
 
 <h2>Remove an Artist from the List:</h2>
 
-<form method="POST" action="/search">
-	<input type="text" name="search_term" placeholder="Search" required maxlength="100">
+<form method="POST" action="/remove">
+	<input type="text" name="remove_term" placeholder="Search" required maxlength="100">
+	<button>Search</button>
+</form>
+
+<h2>Update an Artist from the List:</h2>
+
+<form method="POST" action="/update">
+	<input type="text" name="update_term" placeholder="Search" required maxlength="100">
 	<button>Search</button>
 </form>
