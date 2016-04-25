@@ -2,6 +2,7 @@
 // var fs = require('fs');
 var express = require('express');
 var exphbs  = require('express-handlebars');
+var artist = require('./lib/artist.js')
 
 var app = express();
 
@@ -26,24 +27,14 @@ app.get('/about', function(req, res) {
 });
 
 
-var artists = [     
-    { name: 'kiiara', track: 'feels' },
-    { name: 'tep_no', track: 'lana_del_dre' },
-    { name: 'mtns', track: 'fears' },
-    { name: 'white_sea', track: 'prague' },
-];
-
-
 app.post('/search', function(req,res){
     res.type('html');
     var page_title = '<h1>Searching for: ' + req.body.search_term + '</h1>';
-    
-    var search_results = artists.find(function( obj ) {
-        return obj.name == req.body.search_term;
-    });
-    if (search_results){
+    var user_search_term = req.body.search_term;
 
-        res.send(page_title + 'Track: ' + search_results.track);
+    if (artist.searchArray(user_search_term)){
+
+        res.send(page_title + 'Track: ' + artist.searchArray(user_search_term).track);
 
     } else {
         
