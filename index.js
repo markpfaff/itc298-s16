@@ -52,7 +52,21 @@ app.post('/remove', function(req,res){
 
     artist.removeTerm(user_remove_term);
 
-    res.send(page_title + user_remove_term + ' has been removed');
+    res.send(page_title + user_remove_term + ' has been removed!');
+
+});
+
+//add an item to the list
+app.post('/add', function(req,res){
+    res.type('html');
+    var page_title = '<h1>Adding: ' + req.body.add_name + ' / ' + req.body.add_track + ' / ' + req.body.add_date + '</h1>';
+    var user_add_artist = [{name: req.body.add_name, track: req.body.add_track, date: req.body.add_date}];
+
+    artist.addArtist(user_add_artist);
+
+    res.send(page_title + user_add_artist + ' has been added!');
+
+    res.send(artist.showAllArtists(artists));
 
 });
 
