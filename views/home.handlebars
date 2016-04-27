@@ -26,6 +26,9 @@
 <h2>Update an Artist from the List:</h2>
 
 <form method="POST" action="/update">
-	<input type="text" name="update_term" placeholder="Search" required maxlength="100">
+	<input type="text" name="user_existing_artist_name" placeholder="Artist to update" required maxlength="100">
+	<input type="text" name="user_new_artist_name" placeholder="New Artist Name" required maxlength="100">
+	<input type="text" name="user_new_artist_track" placeholder="New Artist Track" required maxlength="100">	
+	<input type="text" name="user_new_artist_date" placeholder="New Artist Date" required maxlength="100">
 	<button>Update</button>
 </form>

@@ -1,5 +1,3 @@
-// var http = require('http');
-// var fs = require('fs');
 var express = require('express');
 var exphbs  = require('express-handlebars');
 var artist = require('./lib/artist.js');
@@ -35,7 +33,7 @@ app.post('/search', function(req,res){
 
     if (artist.searchArray(user_search_term)){
 
-        res.send(page_title + 'Track: ' + artist.searchArray(user_search_term).track);
+        res.send(page_title + 'Success! ' + user_search_term + ' has the track: ' + artist.searchArray(user_search_term).track);
 
     } else {
         
@@ -52,7 +50,7 @@ app.post('/remove', function(req,res){
 
     artist.removeTerm(user_remove_term);
 
-    res.send(page_title + user_remove_term + ' has been removed!');
+    res.send(page_title + user_remove_term + ' has been removed! </br>' + artist.showArrayLength() + ' artists total');
 
 });
 
@@ -64,11 +62,32 @@ app.post('/add', function(req,res){
 
     artist.addArtist(user_add_artist);
 
-    res.send(page_title + user_add_artist + ' has been added!');
+    res.send(page_title + req.body.add_name + ' has been added! </br>' + artist.showArrayLength() + ' artists total');
 
-    res.send(artist.showAllArtists(artists));
+    //res.send(artist.showAllArtists(artists));
 
 });
+
+
+//add an item to the list
+app.post('/update', function(req,res){
+    res.type('html');
+    var page_title = '<h1>Updating: ' + req.body.user_existing_artist_name + ' to ' + req.body.user_new_artist_name + '</h1>';
+
+    var user_new_artist = [{name: req.body.user_new_artist_name, track: req.body.user_new_artist_track, date: req.body.user_new_artist_date }];
+
+    artist.updateArtist( req.body.user_existing_artist_name, user_new_artist );
+
+
+    if (artist.updateArtist() === 1){
+        res.send(page_title + req.body.user_existing_artist_name + ' has been updated! </br>' + artist.showArrayLength() + ' artists total');
+    }else{
+        res.send('Unable to update artist');
+    }
+
+});
+
+
 
 
 // 404 catch-all handler (middleware)
