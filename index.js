@@ -2,7 +2,6 @@ var express = require('express');
 var exphbs  = require('express-handlebars');
 var artist = require('./lib/artist.js');
 
-
 var app = express();
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -19,8 +18,11 @@ app.use(bodyParser.urlencoded({ extended: true})); //support encoded bodies
 
 
 app.get('/', function(req, res) {
-    res.render('home');
+    res.render('home', {title: 'Home Page'});
 });
+
+
+
 app.get('/about', function(req, res) {
     res.render('about');
 });
@@ -28,16 +30,16 @@ app.get('/about', function(req, res) {
 //add an item to the list
 app.post('/search', function(req,res){
     res.type('html');
-    var page_title = '<h1>Searching for: ' + req.body.search_term + '</h1>';
+    var page_title = 'Searching for: ' + req.body.search_term;
     var user_search_term = req.body.search_term;
 
     if (artist.searchArray(user_search_term)){
 
-        res.send(page_title + 'Success! ' + user_search_term + ' has the track: ' + artist.searchArray(user_search_term).track);
+        res.render('results', {title:'Search Results', page_title:page_title, results:'Success ' + user_search_term + ' has the track: ' + artist.searchArray(user_search_term).track} );
 
     } else {
-        
-        res.send(page_title + 'No artists match your search');
+        res.render('results', {title:'Search Results', page_title:page_title, results:'No artists match your search'} );
+
     }
     
 });
@@ -45,26 +47,24 @@ app.post('/search', function(req,res){
 //remove an item from the list
 app.post('/remove', function(req,res){
     res.type('html');
-    var page_title = '<h1>Removing: ' + req.body.remove_term + '</h1>';
+    var page_title = 'Removing: ' + req.body.remove_term;
     var user_remove_term = req.body.remove_term;
 
     artist.removeTerm(user_remove_term);
-
-    res.send(page_title + user_remove_term + ' has been removed! </br>' + artist.showArrayLength() + ' artists total');
+    
+    res.render('results', {title:'Remove Results', page_title:page_title, results:'Success ' + user_remove_term + ' has been removed! There are now ' + artist.showArrayLength() + ' artists total'});
 
 });
 
 //add an item to the list
 app.post('/add', function(req,res){
     res.type('html');
-    var page_title = '<h1>Adding: ' + req.body.add_name + ' / ' + req.body.add_track + ' / ' + req.body.add_date + '</h1>';
+    var page_title = 'Adding: ' + req.body.add_name + ' / ' + req.body.add_track + ' / ' + req.body.add_date;
     var user_add_artist = [{name: req.body.add_name, track: req.body.add_track, date: req.body.add_date}];
 
     artist.addArtist(user_add_artist);
 
-    res.send(page_title + req.body.add_name + ' has been added! </br>' + artist.showArrayLength() + ' artists total');
-
-    //res.send(artist.showAllArtists(artists));
+    res.render('results', {title:'Add Results', page_title:page_title, results:'Success ' + req.body.add_name + ' has been added! There are ' + artist.showArrayLength() + ' artists total'});
 
 });
 
@@ -72,7 +72,7 @@ app.post('/add', function(req,res){
 //add an item to the list
 app.post('/update', function(req,res){
     res.type('html');
-    var page_title = '<h1>Updating: ' + req.body.user_existing_artist_name + ' to ' + req.body.user_new_artist_name + '</h1>';
+    var page_title = 'Updating: ' + req.body.user_existing_artist_name + ' to ' + req.body.user_new_artist_name;
 
     var user_new_artist = [{name: req.body.user_new_artist_name, track: req.body.user_new_artist_track, date: req.body.user_new_artist_date }];
 
@@ -80,14 +80,14 @@ app.post('/update', function(req,res){
 
 
     if (artist.updateArtist() === 1){
-        res.send(page_title + req.body.user_existing_artist_name + ' has been updated! </br>' + artist.showArrayLength() + ' artists total');
+
+        res.render('results', {title:'Update Results', page_title:page_title, results:'Success ' + req.body.user_existing_artist_name + ' has been updated! There are ' + artist.showArrayLength() + ' artists total'});
+
     }else{
         res.send('Unable to update artist');
     }
 
 });
-
-
 
 
 // 404 catch-all handler (middleware)
