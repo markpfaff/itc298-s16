@@ -76,16 +76,26 @@ app.post('/update', function(req,res){
 
     var user_new_artist = [{name: req.body.user_new_artist_name, track: req.body.user_new_artist_track, date: req.body.user_new_artist_date }];
 
-    artist.updateArtist( req.body.user_existing_artist_name, user_new_artist );
+    artist.updateArtist( user_new_artist );
 
 
-    if (artist.updateArtist() === 1){
+    if (artist.updateArtist().found == true){
 
-        res.render('results', {title:'Update Results', page_title:page_title, results:'Success ' + req.body.user_existing_artist_name + ' has been updated! There are ' + artist.showArrayLength() + ' artists total'});
+        res.render('results', {title:'Update Results', page_title:artist.updateArtist().enteredArtistName, results:'Success ' + req.body.user_existing_artist_name + ' has been updated! There are ' + artist.showArrayLength() + ' artists total'});
 
     }else{
-        res.send('Unable to update artist');
+        res.render('results', {title:'Update Results', page_title:artist.updateArtist().enteredArtistName, results:'Unable to update artist'});
     }
+
+});
+
+//show all artists
+app.post('/master', function(req,res){
+    res.type('html');
+
+    var page_title = 'Showing All Artists: ';
+
+    res.render('master', {title:'All Artists', page_title:page_title, results:'Success ' + req.body.user_existing_artist_name + ' has been updated! There are ' + artist.showArrayLength() + ' artists total'});
 
 });
 
