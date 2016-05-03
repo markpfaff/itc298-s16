@@ -1,9 +1,11 @@
 <h1>{{page_title}}</h1>
 
-<ul>
-	{#each artist}
-		<li>{{name}}</li>
-		<li>{{track}}</li>
-		<li>{{date}}</li>
-	{/each}
-</ul>
+<h2>{{artist_title}}</h2>
+
+	{{#each artists}}
+		<h3>{{name}}</h3>
+		<ul>			
+				<li>Track: {{track}}</li>
+				<li>Date Added: {{date}}</li>			
+		</ul>
+	{{/each}}

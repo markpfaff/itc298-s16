@@ -1,13 +1,25 @@
-<h1>Welcome to Mark Pfaff's Illustrious ITC 298 Node.js Test Page</h1>
+<h1>Welcome to Mark Pfaff's Illustrious ITC 298 App</h1>
 
-<h2>Search for Artist's Name:</h2>
+<h2>{{page_title}}</h2>
+
+<h3>{{artist_title}}</h3>
+
+	{{#each artists}}
+		<h3>{{name}}</h3>
+		<ul>			
+				<li>Track: {{track}}</li>
+				<li>Date Added: {{date}}</li>			
+		</ul>
+	{{/each}}
+
+<h3>Search for Artist's Name:</h3>
 
 <form method="POST" action="/search">
 	<input type="text" name="search_term" placeholder="Search" required maxlength="100">
 	<button>Search</button>
 </form>
 
-<h2>Add an Artist to the List:</h2>
+<h3>Add an Artist to the List:</h3>
 
 <form method="POST" action="/add">
 	<input type="text" name="add_name" placeholder="Artist Name" required maxlength="100">
@@ -16,14 +28,14 @@
 	<button>Add</button>
 </form>
 
-<h2>Remove an Artist from the List:</h2>
+<h3>Remove an Artist from the List:</h3>
 
 <form method="POST" action="/remove">
 	<input type="text" name="remove_term" placeholder="Search" required maxlength="100">
 	<button>Remove</button>
 </form>
 
-<h2>Update an Artist from the List:</h2>
+<h3>Update an Artist from the List:</h3>
 
 <form method="POST" action="/update">
 	<input type="text" name="user_existing_artist_name" placeholder="Artist to update" required maxlength="100">

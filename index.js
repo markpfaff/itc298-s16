@@ -16,9 +16,16 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());//support json enconded bodies
 app.use(bodyParser.urlencoded({ extended: true})); //support encoded bodies
 
+//create public folder for images,css etc
+app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    res.render('home', {title: 'Home Page'});
+    res.type('html');
+
+    var page_title = 'Showing All Artists: ';
+
+    res.render('home', {title:'Home Page', page_title:page_title, artists: artist.showAllArtists(), artist_title:artist.showArtistTitle()});
+
 });
 
 
@@ -74,10 +81,9 @@ app.post('/update', function(req,res){
     res.type('html');
     var page_title = 'Updating: ' + req.body.user_existing_artist_name + ' to ' + req.body.user_new_artist_name;
 
-    var user_new_artist = [{name: req.body.user_new_artist_name, track: req.body.user_new_artist_track, date: req.body.user_new_artist_date }];
+    var user_new_artist = {name: req.body.user_new_artist_name, track: req.body.user_new_artist_track, date: req.body.user_new_artist_date };
 
     artist.updateArtist( user_new_artist );
-
 
     if (artist.updateArtist().found == true){
 
@@ -87,15 +93,6 @@ app.post('/update', function(req,res){
         res.render('results', {title:'Update Results', page_title:artist.updateArtist().enteredArtistName, results:'Unable to update artist'});
     }
 
-});
-
-//show all artists
-app.post('/master', function(req,res){
-    res.type('html');
-
-    var page_title = 'Showing All Artists: ';
-
-    res.render('master', {title:'All Artists', page_title:page_title, results:'Success ' + req.body.user_existing_artist_name + ' has been updated! There are ' + artist.showArrayLength() + ' artists total'});
 
 });
 
