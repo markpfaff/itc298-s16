@@ -1,15 +1,12 @@
 <h1>Welcome to Mark Pfaff's Illustrious ITC 298 App</h1>
 
 <h2>{{page_title}}</h2>
-
+{{> currentDate}}
 <h3>{{artist_title}}</h3>
 
+
 	{{#each artists}}
-		<h3>{{name}}</h3>
-		<ul>			
-				<li>Track: {{track}}</li>
-				<li>Date Added: {{date}}</li>			
-		</ul>
+		<a href="detail/{{name}}"><h3>{{name}}</h3></a>
 	{{/each}}
 
 <h3>Search for Artist's Name:</h3>
@@ -24,7 +21,7 @@
 <form method="POST" action="/add">
 	<input type="text" name="add_name" placeholder="Artist Name" required maxlength="100">
 	<input type="text" name="add_track" placeholder="Artist Track" required maxlength="100">
-	<input type="text" name="add_date" placeholder="YYYY-MM-DD" required maxlength="100">
+	<input type="date" name="add_date" placeholder="YYYY-MM-DD" required maxlength="100">
 	<button>Add</button>
 </form>
 
@@ -38,9 +35,8 @@
 <h3>Update an Artist from the List:</h3>
 
 <form method="POST" action="/update">
-	<input type="text" name="user_existing_artist_name" placeholder="Artist to update" required maxlength="100">
 	<input type="text" name="user_new_artist_name" placeholder="New Artist Name" required maxlength="100">
 	<input type="text" name="user_new_artist_track" placeholder="New Artist Track" required maxlength="100">	
-	<input type="text" name="user_new_artist_date" placeholder="New Artist Date" required maxlength="100">
+	<input type="date" name="user_new_artist_date" placeholder="New Artist Date" required maxlength="100">
 	<button>Update</button>
 </form>
