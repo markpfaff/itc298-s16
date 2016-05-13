@@ -2,7 +2,6 @@ module.exports = function(app){
 
 	var artist = require('./lib/artist.js');
 
-
 	app.get('/', function(req, res) {
 	    res.type('html');
 
@@ -64,7 +63,7 @@ module.exports = function(app){
 	    var page_title = 'Adding: ' + req.body.add_name + ' / ' + req.body.add_track + ' / ' + req.body.add_date;
 	    var user_add_artist = [{name: req.body.add_name, track: req.body.add_track, date: req.body.add_date}];
 
-	    artist.addArtist(user_add_artist);
+	    artist.updateArtist(user_add_artist);
 
 	    res.render('results', {title:'Add Results', page_title:page_title, results:'Success ' + req.body.add_name + ' has been added! There are ' + artist.showArrayLength() + ' artists total'});
 
