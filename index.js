@@ -1,7 +1,8 @@
 var express = require('express');
 var exphbs  = require('express-handlebars');
 var app = express();
-var credentials = require('./credentials.js');
+var ArtistDB = require('./models/artistDB.js')
+var testdb = require('./models/test_db.js')
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -36,52 +37,9 @@ app.use(function(req, res, next){
 require('./routes.js')(app);
 
 
-
-
-
-
-//database connection
-var mongoose = require('mongoose');
-mongoose.connect(credentials.getCredentials());
-var Schema = mongoose.Schema;
-
-// create db schema
-var artistDBSchema = new Schema({
-  name: { type: String, required: true },
-  track: String,
-  date: Date
-});
-
-//console.log(artistDBSchema);
-
-//create model
-var ArtistDB = mongoose.model('ArtistDB', artistDBSchema);
-
-// make this available to app
-module.exports = ArtistDB;
-
-//module.exports = mongoose.model('Person', mySchema);
-
-
-
-// create a new user
-var newArtist = ArtistDB({
-  name: 'beyonce',
-  track: 'all_night',
-  date: '2016-04-21'
-});
-
-// save the user
-newArtist.save(function(err) {
-  if (err) throw err;
-
-  console.log('Artist created!');
-});
-
-
-
-
-
+//run test_db.js
+testdb.addDB();
+testdb.listDB();
 
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
