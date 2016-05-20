@@ -2,7 +2,6 @@ var express = require('express');
 var exphbs  = require('express-handlebars');
 var app = express();
 var ArtistDB = require('./models/artistDB.js')
-var testdb = require('./models/test_db.js')
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');

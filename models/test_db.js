@@ -21,6 +21,6 @@ new ArtistDB({
 }).save();
 
 ArtistDB.find(function(err, artists){
-
-		console.log(artists);
+	if(err) console.log(err);
+	console.log(artists);
 });
