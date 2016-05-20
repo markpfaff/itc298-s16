@@ -37,10 +37,6 @@ app.use(function(req, res, next){
 require('./routes.js')(app);
 
 
-//run test_db.js
-testdb.addDB();
-testdb.listDB();
-
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
     res.status(404);
