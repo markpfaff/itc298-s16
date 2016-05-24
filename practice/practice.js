@@ -17,7 +17,7 @@ artists.forEach(showAll);
 //loop through specific key
 for (i=0;i<artists.length;i++){
 
-  print awesome column
+  //print awesome column
 	document.write("Name: " + artists[i].name + "<br>");
   
   console.log(artists[i]);
@@ -47,11 +47,9 @@ for (i=0;i<artists.length;i++){
   
 }
 
-
-var byDateAsc = function(artist1, artist2) {
-
  // sorts students by age in ascending order
 
+var byDateAsc = function(artist1, artist2) {
  return artist1.date - artist2.date;
 
 }
@@ -63,6 +61,8 @@ document.write("<br>Show number of data items<br><br>")
 
 document.write(artists.length);
 
+
+//remove data item
 for(var i = artists.length - 1; i >= 0; i--) {
     if(artists[i].name === "tep_no") {
        artists.splice(i, 1);
