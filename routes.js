@@ -7,11 +7,9 @@ module.exports = function(app){
 	//home page - show all artists
 	app.get('/', function(req, res) {
 	    res.type('html');
-
 	    var page_title = 'Showing All Artists: ';
 	    ArtistDB.find(function(err,artists){
-	    	if(err) return next(err);
-	    	if(!artists) return next();
+	    	if(err) return console.log(err);
 	    	res.render('home', {title:'Home Page', page_title:page_title, artists:artists});
 	    });
 
@@ -22,8 +20,7 @@ module.exports = function(app){
 	    var userArtist = req.params.artistName.toLowerCase();
 
 	    ArtistDB.findOne({name:userArtist},function(err,artist){
-	    	if(err) return next(err);
-	    	if(!artist) return next();
+	    	if(err) return console.log(err);
 	    	var newDate = false;
 		    if (artist.date > '2015-01-01'){
 		        newDate = true;
@@ -42,12 +39,11 @@ module.exports = function(app){
 	app.post('/search', function(req,res){
 	    res.type('html');
 	    var page_title = 'Searching for: ' + req.body.search_term;
-	    var user_search_term = req.body.search_term;
+	    var user_search_term = req.body.search_term.toLowerCase();
 
 
 		ArtistDB.findOne({name:user_search_term},function(err,artist){
-		    if(err) return next(err);
-	    	if(!artist) return next();
+	    	if(err) return console.log(err);
 
 		    if (artist){
 
@@ -65,9 +61,10 @@ module.exports = function(app){
 	app.post('/remove', function(req,res){
 	    res.type('html');
 	    var page_title = 'Removing: ' + req.body.remove_term;
-	    var user_remove_term = req.body.remove_term;
+	    var user_remove_term = req.body.remove_term.toLowerCase();
 
 	    ArtistDB.findOneAndRemove({name: user_remove_term} , function(err,artist){
+	    	if(err) return console.log(err);
 		    if (artist){
 
 		        res.render('results', {title:'Search Results', page_title:page_title, results:'Success! ' + user_remove_term + ' has been removed.'} );
@@ -84,9 +81,9 @@ module.exports = function(app){
 	app.post('/add', function(req,res){
 	    res.type('html');
 	    var page_title = 'Adding: ' + req.body.add_name + ' / ' + req.body.add_track + ' / ' + req.body.add_date;
-	    var user_add_artist = [{name: req.body.add_name, track: req.body.add_track, date: req.body.add_date}];
-	    var addArtistName = req.body.add_name;
-	    var addArtistTrack = req.body.add_track;
+	    var user_add_artist = [{name: req.body.add_name.toLowerCase(), track: req.body.add_track.toLowerCase(), date: req.body.add_date}];
+	    var addArtistName = req.body.add_name.toLowerCase();
+	    var addArtistTrack = req.body.add_track.toLowerCase();
 		var addArtistDate = req.body.add_date;
 
 		var found = false;
@@ -97,8 +94,6 @@ module.exports = function(app){
 				found = true;
 
 		});
-
-
 
 		if(found == false){
 
@@ -123,8 +118,8 @@ module.exports = function(app){
 	app.post('/update', function(req,res){
 	    res.type('html');
 	    var page_title = 'Updating: ' + req.body.user_new_artist_name;
-	    var artist_name = req.body.user_new_artist_name;
-	    var user_new_artist = {name: req.body.user_new_artist_name, track: req.body.user_new_artist_track, date: req.body.user_new_artist_date };
+	    var artist_name = req.body.user_new_artist_name.toLowerCase();
+	    var user_new_artist = {name: req.body.user_new_artist_name.toLowerCase(), track: req.body.user_new_artist_track.toLowerCase(), date: req.body.user_new_artist_date };
 
 	 ArtistDB.findOne(artist_name, function (err, artist) {
 	      if (err) return console.log(err);
@@ -144,29 +139,32 @@ module.exports = function(app){
 
 	});
 
-
 	//api for all artist
 	app.get('/api/artists', function(req, res){
-	    var artists = artist.getArtists();
 
-	    if (artists) {
-	        res.json(artists);
-	    } else {
-	        res.status(500).send('Error occurred: server error.');
-	    }
+	    ArtistDB.find(function(err,artists){
+	    	if(err) return console.log(err);
+		    	if(artists){
+		    		res.json(artists);
+		    	} else {
+	        		res.status(500).send('Error occurred: server error.');
+	    		}
+	    	});
 
 	});
 
 	//api for artist detail
 	app.get('/api/artists/:artist_name', function(req, res){
-	    var artists = artist.searchArray(req.params.artist_name);
 
-	    if (artists) {
-	        res.json(artists);
-	    } else {
+	    ArtistDB.findOne(req.params.artist_name, function (err, artist) {
+	      if (err) return console.log(err);
+
+	      if(artist){
+	      	res.json(artist);
+	      } else {
 	        res.status(500).send('Error occurred: server error.');
-	    }
-
+	    	}
+	  });
 	});
 
 
