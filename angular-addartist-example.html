@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+
+	<body ng-app="listApp">
+		<div ng-controller="listController">
+			<p>Add : <input type="text" ng-model="newartist"></p>
+			<button ng-click="add()">Add</button>
+			<h2>Contacts</h2>
+
+			<ul>
+			    <li ng-repeat="artist in artists"> {{ artist }} </li>
+			</ul>
+
+		</div>
+
+		<script>
+			var listApp = angular.module('listApp',[]);
+			listApp.controller('listController', ['$scope', function($scope) {
+
+				// create artists array
+				$scope.artists = ['kiiara', 'tep_no', 'mtns', 'white_sea'];
+
+				// add artist to array
+				$scope.add = function() {
+				    $scope.artists.push($scope.newartist);
+				    $scope.newartist = "";
+				}
+			}]);
+		</script>
+	</body>
+</html>

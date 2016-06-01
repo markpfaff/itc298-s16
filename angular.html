@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+	<style>
+		ul {
+			list-style-type: none;
+		}
+	</style>
+	<body ng-app="listApp">
+		<div ng-controller="listController">
+<!-- 			<p>Add : <input type="text" ng-model="newArtist"></p>
+			<button ng-click="add()">Add</button> -->
+			<p>Search : <input type="text" ng-model="searchArtist"></p>
+			<button ng-click="search()">Search</button>
+			<h2>List of Artists:</h2>
+			<h3>There are {{artists.length}} artists</h3>
+			<ul ng-repeat="artist in artists | filter:searchArtist">
+				<li><button ng-click="showDetails(artist)">{{ artist.name }}</button></li>    
+			</ul>
+
+			<h3>Selected Artist Details:</h3>
+			<ul>	
+				<li>{{ selectedArtist.name }}</li>
+				<li>{{ selectedArtist.track }}</li>
+				<li>{{ selectedArtist.date }}</li>
+			</ul>
+
+		</div>
+
+		<script>
+			var listApp = angular.module('listApp',[]);
+			listApp.controller('listController', ['$scope', function($scope) {
+
+				// create artists array
+				$scope.artists = [     
+				    { name: 'kiiara', track: 'feels', date: '2016-12-12' },
+				    { name: 'tep_no', track: 'lana_del_dre', date: '2014-12-12' },
+				    { name: 'mtns', track: 'fears', date: '2014-12-12' },
+				    { name: 'white_sea', track: 'prague', date: '2014-12-12' },
+				];
+
+			    $scope.showDetails = function(artist){
+			    	$scope.selectedArtist = artist;
+			    }
+
+				// add artist to array
+				// $scope.add = function() {
+				//     $scope.artists.push($scope.newArtist);
+				//     $scope.newArtist = "";
+				// };
+			}]);
+		</script>
+	</body>
+</html>
