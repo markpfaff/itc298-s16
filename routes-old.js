@@ -83,7 +83,7 @@ module.exports = function(app){
 	    var page_title = 'Adding: ' + req.body.add_name + ' / ' + req.body.add_track + ' / ' + req.body.add_date;
 	    var user_add_artist = [{name: req.body.add_name.toLowerCase(), track: req.body.add_track.toLowerCase(), date: req.body.add_date}];
 	    var addArtistName = req.body.add_name.toLowerCase();
-	    var addArtistTrack = req.body.artist.track.toLowerCase();
+	    var addArtistTrack = req.body.add_track.toLowerCase();
 		var addArtistDate = req.body.add_date;
 
 		var found = false;

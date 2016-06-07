@@ -11,7 +11,6 @@
 <!-- 			<p>Add : <input type="text" ng-model="newArtist"></p>
 			<button ng-click="add()">Add</button> -->
 			<p>Search : <input type="text" ng-model="searchArtist"></p>
-			<button ng-click="search()">Search</button>
 			<h2>List of Artists:</h2>
 			<h3>There are {{artists.length}} artists</h3>
 			<ul ng-repeat="artist in artists | filter:searchArtist">
@@ -30,6 +29,11 @@
 		<script>
 			var listApp = angular.module('listApp',[]);
 			listApp.controller('listController', ['$scope', function($scope) {
+
+				// $http.get("/api/")
+				//     .then(function(response) {
+				//         $scope.myWelcome = response.data;
+			 //    });
 
 				// create artists array
 				$scope.artists = [     
