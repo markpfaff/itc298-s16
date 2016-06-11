@@ -49,42 +49,43 @@
 					<p>Search : <input type="text" ng-model="searchArtist"></p>					
 					<h3>There are {{artistList.length}} artists</h3>
 					<ul ng-repeat="artist in artistList | filter:searchArtist">
-						<li><button ng-click="showDetails(artist)">{{ artist.name }}</button></li>
-						<li><button ng-click="showRemove(artist)">Remove Artist</button></li>    
-						<li><button ng-click="showUpdate(artist)">Update Artist</button></li>   
+						<li><button ng-click="showDetails(artist)">{{ artist.name }}</button></li>  
 					</ul>
 				</div>
 
 				<div ng-show="revealDetails">
-					<h3>Selected Artist Details:</h3>
+					<h3>{{ selectedArtist.name }}:</h3>
 					<ul>	
-						<li>{{ selectedArtist.name }}</li>
-						<li>{{ selectedArtist.track }}</li>
-						<li>{{ selectedArtist.date }}</li>
+						<li>Track Name: {{ selectedArtist.track }}</li>
+						<li>Date Released: {{ selectedArtist.date | date : 'MMMM d, y' }}</li>
+						<li><button ng-click="showRemove(selectedArtist)">Remove Artist</button></li>    
+						<li><button ng-click="showUpdate(selectedArtist)">Update Artist</button></li> 
 					</ul>
 				</div>
 
 				<div ng-show="revealUpdate">
 					<h3>Update Artist:</h3>
-					<form method="POST" action="/update">
-						<input type="text" name="user_new_artist_name" value="{{updateArtist.name}}" required maxlength="100">
-						<input type="text" name="user_new_artist_track" value="{{updateArtist.track}}" required maxlength="100">	
-						<input type="date" name="user_new_artist_date" value="{{updateArtist.date | date : 'yyyy-MM-dd' }}" required maxlength="100">
-						<button>Update Artist</button>
-					</form>
+					<h3 ng-bind="post_update_result"></h3>
+					<div>
+						<input type="text" ng-model="updateThisArtist.name" placeholder="{{updateThisArtist.name}}" required maxlength="100">
+						<input type="text" ng-model="updateThisArtist.track" placeholder="{{updateThisArtist.track}}" required maxlength="100">	
+						<input type="date" ng-model="updateThisArtist.date" placeholder="{{updateThisArtist.date | date : 'yyyy-MM-dd' }}" required maxlength="100">
+						<button ng-click="updateArtist()">Update Artist</button>
+					</div>
 				</div>
 
 				<div ng-show="revealRemove">
 					<h3>Remove Artist:</h3>
-					<form method="POST" action="/remove">
-						<input type="text" name="remove_term" value="{{removeArtist.name}}" required maxlength="100">
-						<button>Remove Artist</button>
-					</form>
+					<h3 ng-bind="post_remove_result"></h3>
+					<div>
+						<input type="text" ng-model="artist.name" placeholder="{{removeThisArtist.name}}" required maxlength="100">
+						<button ng-click="removeArtist()">Remove Artist</button>
+					</div>
 				</div>
 
 				<div>
 					<h3>Add an Artist:</h3>
-					<h3 ng-bind="post_result"></h3>
+					<h3 ng-bind="post_add_result"></h3>
 					<div>
 						<input type="text" ng-model="artist.name" placeholder="Artist Name" required maxlength="100">
 						<input type="text" ng-model="artist.track" placeholder="Artist Track" required maxlength="100">
@@ -108,17 +109,9 @@
 				$http.get("/api/artists")
 			    	.then(function( response) {
 			        	$scope.artistList = response.data;
-			        	console.log(response.data);
 
 			    });
 
-				// create artists array
-				// $scope.artists = [     
-				//     { name: 'kiiara', track: 'feels', date: '2016-12-12' },
-				//     { name: 'tep_no', track: 'lana_del_dre', date: '2014-12-12' },
-				//     { name: 'mtns', track: 'fears', date: '2014-12-12' },
-				//     { name: 'white_sea', track: 'prague', date: '2014-12-12' },
-				// ];
 
 				$scope.revealUpdate = false;
 				$scope.revealDetails = false;
@@ -127,32 +120,63 @@
 			    $scope.showDetails = function(artist){
 			    	$scope.selectedArtist = artist;
 			    	$scope.revealDetails = true;
-			    }
+					// $scope.revealUpdate = false;
+					// $scope.revealRemove = false;			    	
+			    };
 
 			    $scope.showRemove = function(artist){
-			    	$scope.removeArtist = artist;
+			    	$scope.removeThisArtist = artist;
 			    	$scope.revealRemove = true;
-
-			    }
+			  //   	$scope.revealDetails = false;
+					// $scope.revealUpdate = false;
+			    };
 
 			    $scope.showUpdate = function(artist){
-			    	$scope.updateArtist = artist;
+			    	$scope.updateThisArtist = artist;
 			    	$scope.revealUpdate = true;
+			  //   	$scope.revealDetails = false;
+					// $scope.revealRemove = false;
+			    };
 
-			    }
 
 			    $scope.saveArtist = function() { 
 			        $http.post('/add', $scope.artist)
 				        .then(function successCallback(response) {
-				            $scope.post_result = response.data;
+				            $scope.post_add_result = response.data.result;
 				        }, function errorCallback(response) {
 				          console.log('Error: ' + response.data);
-		        });
-				// add artist to array
-				// $scope.add = function() {
-				//     $scope.artists.push($scope.newArtist);
-				//     $scope.newArtist = "";
-				// };
+		        	});
+				};
+
+				$scope.removeArtist = function() { 
+			        $http.post('/remove', $scope.removeThisArtist)
+				        .then(function successCallback(response) {
+				            $scope.post_remove_result = response.data.result;
+				            var awesome = $scope.artistList.indexOf($scope.removeThisArtist.name); 
+
+				            $scope.artistList.splice(awesome);
+
+				        }, function errorCallback(response) {
+				          console.log('Error: ' + response.data);
+		        	});
+				};
+
+				$scope.updateArtist = function() { 
+			        $http.post('/update', $scope.updateThisArtist)
+				        .then(function successCallback(response) {
+				            $scope.post_update_result = response.data.result;
+				            $scope.artistList.find($scope.updateThisArtist.name, function (err, artist) {
+								      if (err) return console.log(err);
+									      artist.name = updateThisArtist.name;
+									      artist.track = updateThisArtist.track;
+									      artist.date = updateThisArtist.date;
+								  }); 
+
+				        }, function errorCallback(response) {
+				          console.log('Error: ' + response.data);
+		        	});
+				};				
+
 			}]);
 		</script>
 	</body>
